@@ -13,41 +13,46 @@ document.addEventListener('DOMContentLoaded', () => {
     debugShipDisplay.style.marginTop = '5px';
     debugIcon.parentElement.appendChild(debugShipDisplay);
 
-    themeToggle.addEventListener('input', () => {
-        let themeState = parseInt(themeToggle.value, 10);
+    function setupUI() {
+        themeToggle.addEventListener('input', () => {
+            let themeState = parseInt(themeToggle.value, 10);
 
-        if (themeState === 0) {
-            body.classList.remove('dark-mode', 'navy-mode');
-            themeIcon.innerHTML = '🌞';
-        } else if (themeState === 1) {
-            body.classList.add('dark-mode');
-            body.classList.remove('navy-mode');
-            themeIcon.innerHTML = '🌙';
-        } else {
-            body.classList.add('navy-mode');
-            body.classList.remove('dark-mode');
-            themeIcon.innerHTML = `<img src="./assets/navy.png" alt="Navy" class="navy-icon">`;
-        }
-    });
+            if (themeState === 0) {
+                body.classList.remove('dark-mode', 'navy-mode');
+                themeIcon.innerHTML = '🌞';
+            } else if (themeState === 1) {
+                body.classList.add('dark-mode');
+                body.classList.remove('navy-mode');
+                themeIcon.innerHTML = '🌙';
+            } else {
+                body.classList.add('navy-mode');
+                body.classList.remove('dark-mode');
+                themeIcon.innerHTML = `<img src="./assets/navy.png" alt="Navy" class="navy-icon">`;
+            }
+        });
+
+        debugCheckbox.addEventListener('change', () => {
+            debugMode = debugCheckbox.checked;
+            if (debugMode) {
+                debugShipDisplay.innerHTML = `<strong>Ships: ${ships.map(s => s.positions.join(',')).join(' | ')}</strong>`;
+            } else {
+                debugShipDisplay.innerHTML = '';
+            }
+        });
+    }
+
+    setupUI();
 
     const board = document.getElementById('board');
     const newGame = document.getElementById('newGame');
 
-    const gridSize = 10;
+    const gridSize = 6;
     let ships = [];
-    let hits = 0;
+    let guesses = 0;
+    let gameOver = false;
     const hitSound = new Audio('./assets/sounds/hit.wav');
     const missSound = new Audio('./assets/sounds/miss.wav');
     let debugMode = false;
-
-    debugCheckbox.addEventListener('change', () => {
-        debugMode = debugCheckbox.checked;
-        if (debugMode) {
-            debugShipDisplay.innerHTML = `<strong>Ship Indices: ${ships.join(', ')}</strong>`;
-        } else {
-            debugShipDisplay.innerHTML = '';
-        }
-    });
 
     function createBoard() {
         board.innerHTML = '';
@@ -64,39 +69,99 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function placeShips() {
-        ships = [];
-        while (ships.length < 10) {
-            const pos = Math.floor(Math.random() * gridSize * gridSize);
-            if (!ships.includes(pos)) {
-                ships.push(pos);
+    function handleFire(index, cell) {
+        if (gameOver) return;
+        guesses++;
+        let hitShip = null;
+
+        for (let ship of ships) {
+            if (ship.positions.includes(index)) {
+                ship.hits.push(index);
+                hitShip = ship;
+                break;
             }
         }
 
-        if (debugMode) {
-            debugShipDisplay.innerHTML = `<strong>Ship Indices: ${ships.join(', ')}</strong>`;
-        }
-    }
-
-    function handleFire(index, cell) {
-        if (ships.includes(index)) {
+        if (hitShip) {
             cell.classList.add('correct');
             cell.textContent = '💥';
             hitSound.play();
-            hits++;
-            if (hits === ships.length) {
-                message.textContent = '🎯 All ships sunk! You win!';
+
+            if (hitShip.hits.length === hitShip.positions.length) {
+                message.textContent = '🔥 You sunk a ship!';
+            } else {
+                message.textContent = '💢 Hit!';
             }
+
         } else {
             cell.classList.add('absent');
             cell.textContent = '🌊';
             missSound.play();
+            message.textContent = 'Miss!';
         }
+
         cell.style.pointerEvents = 'none';
+
+        const allSunk = ships.every(s => s.hits.length === s.positions.length);
+        if (allSunk) {
+            gameOver = true;
+            message.textContent = '🎯 All ships sunk! You win!';
+            revealRemaining();
+        } else if (guesses >= 20) {
+            gameOver = true;
+            message.textContent = '💀 Game over. Out of guesses.';
+            revealRemaining();
+        }
+    }
+
+    function revealRemaining() {
+        const cells = document.querySelectorAll('.square');
+        for (let ship of ships) {
+            for (let pos of ship.positions) {
+                const cell = cells[pos];
+                if (!cell.classList.contains('correct')) {
+                    cell.classList.add('correct');
+                    cell.textContent = '🚢';
+                }
+            }
+        }
+    }
+
+    async function placeShips() {
+        ships = [];
+        try {
+            const response = await fetch('./assets/battleship.json');
+            const data = await response.json();
+
+            data.ships.forEach(ship => {
+                const { name, orientation, size, coords } = ship;
+                const positions = [];
+
+                let [col, row] = coords.map(x => x - 1); // convert to 0-based
+
+                for (let i = 0; i < size; i++) {
+                    const index = orientation === 'horizontal'
+                        ? row * gridSize + (col + i)
+                        : (row + i) * gridSize + col;
+
+                    positions.push(index);
+                }
+
+                ships.push({ name, positions, hits: [] });
+            });
+
+            if (debugMode) {
+                debugShipDisplay.innerHTML = `<strong>Ships: ${ships.map(s => s.positions.join(',')).join(' | ')}</strong>`;
+            }
+
+        } catch (error) {
+            console.error('Failed to load ship data:', error);
+        }
     }
 
     function resetGame() {
-        hits = 0;
+        guesses = 0;
+        gameOver = false;
         createBoard();
         placeShips();
         message.textContent = '';

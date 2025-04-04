@@ -1,4 +1,3 @@
-/* Reset default margin and padding */
 * {
     margin: 0;
     padding: 0;
@@ -134,6 +133,14 @@ body.navy-mode .theme-switch input[type="range"] {
     border: 2px solid var(--link-color);
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.debug-container input[type="checkbox"]:focus-visible {
+    outline: 2px dashed var(--link-color);
+    outline-offset: 2px;
 }
 
 .debug-container input[type="checkbox"]:checked {
@@ -182,11 +189,16 @@ button:hover {
 /* Battleship Grid */
 .battleship-board {
     display: grid;
-    grid-template-columns: repeat(10, 40px);
-    grid-template-rows: repeat(10, 40px);
+    grid-template-columns: repeat(6, 40px);
+    grid-template-rows: repeat(6, 40px);
     gap: 5px;
-    margin: 0 auto;
-    justify-content: center;
+    padding: 15px;
+    margin: 20px auto;
+    border: 2px solid var(--square-border-color);
+    border-radius: 10px;
+    background-color: var(--bg-color);
+    width: max-content;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .battleship-board .square {
