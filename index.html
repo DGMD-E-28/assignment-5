@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <title>Battleship Game - DGMD E-28 Assignment 5</title>
+    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navigation Bar with Logo, Debug Toggle, and Theme Switch -->
+<header>
+    <div class="nav-bar">
+        <!-- Debug Toggle Container -->
+        <div class="debug-container">
+            <label>
+                <input type="checkbox" id="debug-toggle">
+                <span id="debug-icon" class="debug-icon">🐞</span> <!-- Bug Icon for Debug Mode -->
+            </label>
+        </div>
+
+        <a href="index.html">
+            <img src="assets/default.png" alt="Battleship" class="logo">
+        </a>
+
+        <!-- Theme Switch Container -->
+        <div class="theme-container">
+            <span id="theme-icon">🌞</span>
+            <div class="theme-switch">
+                <input type="range" id="theme-toggle" min="0" max="2" step="1" value="0">
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Game Container -->
+<div class="game-container">
+    <h2>Battleship Grid</h2>
+    <div id="board" class="battleship-board"></div>
+    <button id="newGame">New Game</button>
+    <div id="message"></div>
+</div>
+
+<script src="./scripts/script.js"></script>
+</body>
+</html>
