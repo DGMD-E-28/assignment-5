@@ -81,7 +81,7 @@ body {
     -webkit-appearance: none;
     width: 50px;
     height: 10px;
-    background: #ccc;
+    background: var(--text-color);
     border-radius: 5px;
     outline: none;
 }
@@ -125,7 +125,7 @@ button {
     border: none;
     border-radius: 5px;
     background-color: var(--link-color);
-    color: white;
+    color: var(--text-color);
     cursor: pointer;
     font-size: 16px;
 }
@@ -155,7 +155,7 @@ button:hover {
     font-size: 20px;
     border: 2px solid var(--square-border-color);
     border-radius: 4px;
-    background-color: white;
+    background-color: var(--text-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,34 +165,34 @@ button:hover {
 /* Hover effect */
 .battleship-board .square:not(.correct):not(.absent):hover {
     background-color: var(--link-color);
-    color: white;
+    color: var(--text-color);
     transform: scale(1.05);
     transition: all 0.2s ease;
 }
 
 /* Hit animation */
 @keyframes hitPulse {
-    0% { transform: scale(1); background-color: #6AAA64; }
-    50% { transform: scale(1.2); background-color: #9ED78A; }
-    100% { transform: scale(1); background-color: #6AAA64; }
+    0% { transform: scale(1); background-color: var(--primary-color); }
+    50% { transform: scale(1.2); background-color: var(--primary-color); }
+    100% { transform: scale(1); background-color: var(--primary-color); }
 }
 
 .battleship-board .square.correct {
-    background-color: #6AAA64;
-    color: white;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     animation: hitPulse 0.3s ease;
 }
 
 /* Miss animation */
 @keyframes missRipple {
-    0% { transform: scale(1); background-color: #787C7E; }
-    50% { transform: scale(1.1); background-color: #A0A4A8; }
-    100% { transform: scale(1); background-color: #787C7E; }
+    0% { transform: scale(1); background-color: var(--primary-color); }
+    50% { transform: scale(1.1); background-color: var(--primary-color); }
+    100% { transform: scale(1); background-color: var(--primary-color); }
 }
 
 .battleship-board .square.absent {
-    background-color: #787C7E;
-    color: white;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     animation: missRipple 0.3s ease;
 }
 
