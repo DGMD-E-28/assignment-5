@@ -4,14 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeIcon = document.getElementById('theme-icon');
     const body = document.body;
     const message = document.getElementById('message');
-    const debugCheckbox = document.getElementById('debug-toggle');
-    const debugIcon = document.getElementById('debug-icon');
-    const debugShipDisplay = document.createElement('div');
-    debugShipDisplay.style.fontSize = '14px';
-    debugShipDisplay.style.textAlign = 'center';
-    debugShipDisplay.style.color = 'var(--text-color)';
-    debugShipDisplay.style.marginTop = '5px';
-    debugIcon.parentElement.appendChild(debugShipDisplay);
+    const newGame = document.getElementById('newGame');
 
     function setupUI() {
         themeToggle.addEventListener('input', () => {
@@ -30,21 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 themeIcon.innerHTML = `<img src="./assets/navy.png" alt="Navy" class="navy-icon">`;
             }
         });
-
-        debugCheckbox.addEventListener('change', () => {
-            debugMode = debugCheckbox.checked;
-            if (debugMode) {
-                debugShipDisplay.innerHTML = `<strong>Ships: ${ships.map(s => s.positions.join(',')).join(' | ')}</strong>`;
-            } else {
-                debugShipDisplay.innerHTML = '';
-            }
-        });
     }
 
     setupUI();
 
     const board = document.getElementById('board');
-    const newGame = document.getElementById('newGame');
 
     const gridSize = 6;
     let ships = [];
@@ -52,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameOver = false;
     const hitSound = new Audio('./assets/sounds/hit.wav');
     const missSound = new Audio('./assets/sounds/miss.wav');
-    let debugMode = false;
 
     function createBoard() {
         board.innerHTML = '';
@@ -150,20 +132,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 ships.push({ name, positions, hits: [] });
             });
 
-            if (debugMode) {
-                debugShipDisplay.innerHTML = `<strong>Ships: ${ships.map(s => s.positions.join(',')).join(' | ')}</strong>`;
-            }
-
         } catch (error) {
             console.error('Failed to load ship data:', error);
         }
     }
 
-    function resetGame() {
+    async function resetGame() {
         guesses = 0;
         gameOver = false;
+        ships = [];
         createBoard();
-        placeShips();
+        await placeShips();
         message.textContent = '';
     }
 
