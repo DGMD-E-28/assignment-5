@@ -60,7 +60,7 @@ body {
 
 /* Logo */
 .logo {
-    max-width: 150px;
+    max-height: 150px;
     height: auto;
     position: absolute;
     top: 10px;
