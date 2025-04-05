@@ -1,7 +1,7 @@
 # Battleship Game
 
 ## Assignment Overview
-This project is part of **DGMD E-28: Developing Single Page Web Applications**. It focuses on building a simplified version of the classic Battleship game using **JavaScript**, **HTML**, and **CSS**. The goal is to demonstrate DOM manipulation, dynamic event handling, and structured logic using arrays and functions.
+This project is part of **DGMD E-28: Developing Single Page Web Applications**. It recreates a simplified Battleship game using **JavaScript**, **HTML**, and **CSS**, with a focus on working with JavaScript objects and external JSON configuration.
 
 ---
 
@@ -9,9 +9,10 @@ This project is part of **DGMD E-28: Developing Single Page Web Applications**. 
 
 Technologies used:
 
-- **HTML** to structure the grid and game controls
-- **CSS** for styling and layout
-- **JavaScript** for game logic, state tracking, and interactivity
+- **HTML** to create the game structure  
+- **CSS** for styling and layout  
+- **JavaScript** for interactive logic using object-oriented design  
+- **JSON** for ship placement configuration
 
 ---
 
@@ -19,21 +20,30 @@ Technologies used:
 
 ### 🔹 Game Setup
 
-- Dynamically generate a **10x10 grid** of cells
-- Each cell is clickable and represents part of the game board
-- Ships are placed randomly on the grid via a JavaScript array
+- Create a **6x6 grid** using JavaScript and the DOM
+- Ship data (orientation, size, and position) is loaded from an external JSON file (`battleship.json`)
+- Ships are not randomized, but set from the JSON file
 
-### 🔹 Game Logic
+### 🔹 Gameplay Logic
 
-- Clicking on a cell checks if a ship is hit or missed
-- Update the cell to display:
-  - 💥 Hit
-  - 🌊 Miss
-- Keep track of the number of ships hit
+- The game places **3 ships**:
+  - One of size 2
+  - One of size 3
+  - One of size 4
+- Ships may be horizontal or vertical
+- User clicks a cell to guess
+  - "💢 Hit!" for a correct partial hit
+  - "🔥 You sunk a ship!" when all cells of a ship are hit
+  - "🌊 Miss!" when no ship occupies that cell
+- The player gets **20 guesses max**
+- Game ends on win or when guesses run out
 
-### 🔹 Victory Condition
+### 🔹 Visual Indicators
 
-- Player is alerted when all ships are sunk
+- Unselected = blank  
+- Hit = red square with 💥  
+- Miss = grey square with 🌊  
+- On game over, all remaining ship positions are revealed with 🚢
 
 ---
 
@@ -42,33 +52,34 @@ Technologies used:
 - `index.html`
 - `styles.css`
 - `script.js`
+- `battleship.json`
 
 ---
 
 ## 💡 Reflection Questions
 
-1. **What was the most challenging part of this assignment?**  
-   Creating a random yet valid ship placement without overlapping cells.
+1. **Of the object variations we have learned, which feels the most useful to you?**  
+   Using arrays of ship objects with methods and properties felt the most useful because it allowed me to group related data and logic together for each ship.
 
-2. **What was the most satisfying part?**  
-   Watching the game come to life and seeing hits and misses register in real time—especially when testing the win condition!
+2. **What was the easiest part of this assignment?**  
+   Building the grid with CSS Grid and generating it dynamically with JavaScript was straightforward and satisfying.
 
 ---
 
 ## 🔗 Resources
 
-- [MDN Web Docs - Event Handling](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
-- [JavaScript Arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
-- [CSS Grid Layout](https://css-tricks.com/snippets/css/complete-guide-grid/)
+- [MDN - JavaScript Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects)  
+- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)  
+- [CSS Grid Guide](https://css-tricks.com/snippets/css/complete-guide-grid/)  
 
 ---
 
 ## Project Details
 
-- **Author:** Elizabeth Koch
-- **Date:** Fri Apr 4, 2025
-- **Live URL:** *[If deployed]*
+- **Author:** Elizabeth Koch  
+- **Date:** Fri Apr 4, 2025  
+- **Live URL:** *https://dgmd-e-28.github.io/assignment-5/*  
 
 ---
 
-Happy Coding! 🎯
+Happy Coding! 🚢🎯
